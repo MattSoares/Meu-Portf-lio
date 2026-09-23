@@ -796,25 +796,30 @@ svg {
   border-top: 1px solid var(--line);
 }
 
-.contact-links a {
+.contact-links > a,
+.contact-email {
   display: grid;
-  grid-template-columns: 90px minmax(0, 1fr) 20px;
+  grid-template-columns: 90px minmax(0, 1fr) 38px;
   gap: 12px;
   align-items: center;
   min-height: 74px;
   border-bottom: 1px solid var(--line);
+}
+
+.contact-links > a {
   text-decoration: none;
   transition:
     color 0.2s ease,
     padding 0.2s ease;
 }
 
-.contact-links a:hover {
+.contact-links > a:hover {
   padding-left: 6px;
   color: var(--blue);
 }
 
-.contact-links span {
+.contact-links > a > span,
+.contact-email > span {
   color: var(--muted);
   font-size: 12px;
   font-weight: 700;
@@ -824,6 +829,44 @@ svg {
 .contact-links strong {
   overflow-wrap: anywhere;
   font-size: 15px;
+}
+
+.contact-email-copy {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.2s ease;
+}
+
+.contact-email-copy:hover {
+  color: var(--blue);
+}
+
+.contact-email-copy svg {
+  flex: none;
+}
+
+.contact-email-compose {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.contact-email-compose:hover {
+  background: #e7ebf2;
 }
 
 .contact-links svg {
@@ -1084,8 +1127,9 @@ svg {
     align-items: flex-start;
   }
 
-  .contact-links a {
-    grid-template-columns: 76px minmax(0, 1fr) 18px;
+  .contact-links > a,
+  .contact-email {
+    grid-template-columns: 76px minmax(0, 1fr) 38px;
     gap: 8px;
   }
 
@@ -1099,17 +1143,21 @@ svg {
     font-size: 36px;
   }
 
-  .contact-links a {
-    grid-template-columns: minmax(0, 1fr) 18px;
+  .contact-links > a,
+  .contact-email {
+    grid-template-columns: minmax(0, 1fr) 38px;
     padding-block: 12px;
   }
 
-  .contact-links a > span,
-  .contact-links a > strong {
+  .contact-links > a > span,
+  .contact-links > a > strong,
+  .contact-email > span,
+  .contact-email-copy {
     grid-column: 1;
   }
 
-  .contact-links svg {
+  .contact-links > a > svg,
+  .contact-email-compose {
     grid-column: 2;
     grid-row: 1 / 3;
   }
