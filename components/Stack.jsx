@@ -15,6 +15,7 @@ import {
   SiReact,
   SiSpringboot,
   SiVite,
+  SiNextdotjs
 } from 'react-icons/si';
 import { VscVscode } from 'react-icons/vsc';
 
@@ -55,6 +56,7 @@ const groups = [
       { name: 'Postman', icon: SiPostman, color: '#dd724c' },
       { name: 'Vite', icon: SiVite, color: '#8b65b7' },
       { name: 'VS Code', icon: VscVscode, color: '#3387ba' },
+      { name: 'Next.js', icon: SiNextdotjs, color: '#000000' }
     ],
   },
 ];
