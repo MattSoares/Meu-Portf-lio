@@ -77,7 +77,7 @@ export default function Projects() {
             </ul>
             <a
               className="text-link"
-              href={profile.github}
+              href={projects.firewatch.repository}
               target="_blank"
               rel="noopener noreferrer"
             >

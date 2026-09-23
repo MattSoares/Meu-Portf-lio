@@ -22,6 +22,10 @@ export const projects = {
       { src: '/assets/odontovida/login.png', alt: 'Tela de login da Clínica OdontoVida' },
     ],
   },
+
+  firewatch: {
+    repository: 'https://github.com/enzo-franco/firewatch-edge-gs1',
+  },
 };
 
 export function assetPath(path) {
