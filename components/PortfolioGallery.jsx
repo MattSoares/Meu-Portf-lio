@@ -1,26 +1,65 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { Maximize2, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { assetPath } from '@/data/portfolio';
 
 export default function PortfolioGallery({ images }) {
-  const dialogRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const closeTimerRef = useRef(null);
   const activeImage = images[activeIndex];
+
+  const openFocus = () => {
+    window.clearTimeout(closeTimerRef.current);
+    setIsClosing(false);
+    setIsFocused(true);
+  };
+
+  const closeFocus = () => {
+    if (!isFocused || isClosing) return;
+
+    setIsClosing(true);
+    closeTimerRef.current = window.setTimeout(() => {
+      setIsFocused(false);
+      setIsClosing(false);
+    }, 320);
+  };
+
+  useEffect(() => {
+    document.body.classList.toggle('gallery-focus-open', isFocused);
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') closeFocus();
+    };
+
+    if (isFocused) window.addEventListener('keydown', closeOnEscape);
+
+    return () => {
+      document.body.classList.remove('gallery-focus-open');
+      window.removeEventListener('keydown', closeOnEscape);
+      if (!isFocused) window.clearTimeout(closeTimerRef.current);
+    };
+  }, [isClosing, isFocused]);
 
   return (
     <div className="project-gallery">
       <button
         className="gallery-main"
         type="button"
-        onClick={() => dialogRef.current.showModal()}
-        aria-label={`Ampliar ${activeImage.alt.toLowerCase()}`}
+        onClick={openFocus}
+        aria-label={`Destacar ${activeImage.alt.toLowerCase()}`}
       >
-        <img src={assetPath(activeImage.src)} alt={activeImage.alt} />
-        <span className="gallery-expand">
-          <Maximize2 aria-hidden="true" /> Ampliar
-        </span>
+        {images.map((image, index) => (
+          <img
+            key={image.src}
+            className={index === activeIndex ? 'is-visible' : ''}
+            src={assetPath(image.src)}
+            alt={index === activeIndex ? image.alt : ''}
+            aria-hidden={index !== activeIndex}
+            loading={index === 0 ? 'eager' : 'lazy'}
+          />
+        ))}
       </button>
       <div className="gallery-thumbnails" role="group" aria-label="Telas do OdontoVida">
         {images.map((image, index) => (
@@ -28,7 +67,9 @@ export default function PortfolioGallery({ images }) {
             key={image.src}
             className={index === activeIndex ? 'is-active' : ''}
             type="button"
-            onClick={() => setActiveIndex(index)}
+            onClick={() => {
+              setActiveIndex(index);
+            }}
             aria-label={`Mostrar ${image.alt.toLowerCase()}`}
             aria-pressed={index === activeIndex}
           >
@@ -36,24 +77,19 @@ export default function PortfolioGallery({ images }) {
           </button>
         ))}
       </div>
-      <dialog
-        className="image-dialog"
-        ref={dialogRef}
-        aria-label="Imagem ampliada do projeto"
-        onClick={(event) => {
-          if (event.target === dialogRef.current) dialogRef.current.close();
-        }}
-      >
-        <button
-          className="dialog-close"
-          type="button"
-          aria-label="Fechar imagem"
-          onClick={() => dialogRef.current.close()}
-        >
-          <X aria-hidden="true" />
-        </button>
-        <img src={assetPath(activeImage.src)} alt={activeImage.alt} />
-      </dialog>
+      {isFocused &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <button
+            className={`gallery-focus-layer${isClosing ? ' is-closing' : ''}`}
+            type="button"
+            onClick={closeFocus}
+            aria-label="Fechar imagem em destaque"
+          >
+            <img src={assetPath(activeImage.src)} alt="" />
+          </button>,
+          document.body,
+        )}
     </div>
   );
 }
