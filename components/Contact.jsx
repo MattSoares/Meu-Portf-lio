@@ -79,9 +79,11 @@ export default function Contact() {
             </button>
             <a
               className="contact-email-compose"
-              href={`mailto:${profile.email}`}
-              aria-label="Abrir aplicativo de e-mail"
-              title="Abrir aplicativo de e-mail"
+              href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(profile.email)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Escrever e-mail para ${profile.email} pelo Gmail`}
+              title="Escrever pelo Gmail"
             >
               <Mail aria-hidden="true" />
             </a>
